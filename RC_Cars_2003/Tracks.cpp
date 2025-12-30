@@ -84,7 +84,6 @@ public:
     void describe() override { cout << "Fishing Village! Narrow streets and docks!" << endl; }
 };
 
-// ======== Example Usage ========
 int main()
 {
     MiniWorld* tracks[] = {
@@ -106,8 +105,6 @@ int main()
         track->describe();
         cout << "Length: " << track->get_length() << " units\n" << endl;
     }
-
-    // Cleanup
     for (auto track : tracks) delete track;
 
     return 0;
