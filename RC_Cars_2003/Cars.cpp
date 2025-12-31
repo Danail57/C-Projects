@@ -1,69 +1,84 @@
-#include <iostream>
-#include <cstdlib>
-#include <ctime>
-#include <thread>
-#include <chrono>
+class Car
+{
+protected:
+	float max_speed;
+	float acceleration;
+	float current_speed;
+	float money;
 
-using namespace std;
-
-class Car {
 public:
-    string name;
-    int position;
+	Car(float max_sp, float accel): max_speed(max_sp), acceleration(accel), current_speed(0), money(0) {}
+	
+	virtual void accelerate() = 0;
+	virtual void brake() = 0;
 
-    Car(string n) {
-        name = n;
-        position = 0;
-    }
-
-    void move() {
-       
-        int step = rand() % 6 + 1;
-        position += step;
-        cout << name << " moves " << step << " steps. Current position: " << position << endl;
-    }
+	void upgrade_engine(float cost)
+	{
+		if (money >= cost)
+		{
+			max_speed += 5;
+			money -= cost;
+		}
+	}
+	float get_current_speed() { return current_speed; }
 };
 
-int main() {
-    srand(time(0));
 
-    Car car1("RC Car 1");
-    Car car2("RC Car 2");
-    Car car3("RC Car 3");
+class SportsCar : public Car
+{
+public:
+	SportsCar() : Car(200, 15){}
+	void accelerate() override
+	{
+		current_speed += acceleration;
+		if (current_speed > max_speed)
+			current_speed = max_speed;
+	}
 
-    const int finishLine = 30;
-    bool raceOver = false;
+	void brake() override
+	{
+		current_speed -= 20;
+		if (current_speed < 0)
+			current_speed = 0;
+	}
+};
 
-    cout << "RC Cars 2003 Race Starts!" << endl;
+class ArmyMachine : public Car
+{
+public:
+	ArmyMachine() : Car(150, 10){}
 
-    while (!raceOver) {
-        this_thread::sleep_for(chrono::milliseconds(500)); 
-        car1.move();
-        car2.move();
-        car3.move();
+	void accelerate() override
+	{
+		current_speed += acceleration;
+		if (current_speed > max_speed)
+			current_speed = max_speed;
+	}
 
-        if (car1.position >= finishLine || car2.position >= finishLine || car3.position >= finishLine) {
-            raceOver = true;
-        }
-    }
+	void brake() override
+	{
+		current_speed -= 15;
+		if (current_speed < 0)
+			current_speed = 0;
+	}
+};
 
-    cout << "\nRace Over!" << endl;
-    if (car1.position >= finishLine && car2.position >= finishLine && car3.position >= finishLine) {
-        cout << "It's a three-way tie!" << endl;
-    } else if (car1.position >= finishLine && car2.position >= finishLine) {
-        cout << "RC Car 1 and RC Car 2 tie!" << endl;
-    } else if (car1.position >= finishLine && car3.position >= finishLine) {
-        cout << "RC Car 1 and RC Car 3 tie!" << endl;
-    } else if (car2.position >= finishLine && car3.position >= finishLine) {
-        cout << "RC Car 2 and RC Car 3 tie!" << endl;
-    } else if (car1.position >= finishLine) {
-        cout << "RC Car 1 wins!" << endl;
-    } else if (car2.position >= finishLine) {
-        cout << "RC Car 2 wins!" << endl;
-    } else {
-        cout << "RC Car 3 wins!" << endl;
-    }
+class BuggyCar : public Car
+{
+public:
+	BuggyCar() : Car(190, 20){}
 
-    return 0;
-}
+	void accelerate() override
+	{
+		current_speed += acceleration;
+		if (current_speed > max_speed)
+			current_speed = max_speed;
+	}
 
+	void brake() override
+	{
+		current_speed -= 15;
+		if (current_speed < 0)
+			current_speed = 0;
+	}
+};
